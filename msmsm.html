@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASHEN_x Red Store SHANUWA </title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  font-family:Poppins;
+  background:#0a0a0a;
+  color:white;
+}
+
+/* TOP BAR */
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  padding:15px;
+  background:#111;
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+
+.logo{
+  font-family:Orbitron;
+  color:red;
+  font-weight:bold;
+}
+
+.cart{
+  background:red;
+  padding:8px 15px;
+  border-radius:20px;
+  cursor:pointer;
+}
+
+/* HERO */
+.hero{
+  text-align:center;
+  padding:60px 20px;
+  background:linear-gradient(135deg,#200000,#ff0000,#200000);
+}
+
+.hero h1{
+  font-size:40px;
+  font-family:Orbitron;
+  text-shadow:0 0 20px red;
+}
+
+.btn{
+  padding:10px 20px;
+  background:red;
+  border:none;
+  color:white;
+  border-radius:20px;
+  cursor:pointer;
+}
+
+/* PRODUCTS */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+  padding:20px;
+}
+
+.card{
+  background:#1a1a1a;
+  padding:15px;
+  border-radius:15px;
+  transition:0.3s;
+}
+
+.card:hover{
+  transform:scale(1.05);
+}
+
+.card img{
+  width:100%;
+  border-radius:10px;
+}
+
+.price{color:red;font-weight:bold;}
+
+/* CART PANEL */
+.cartPanel{
+  position:fixed;
+  right:-400px;
+  top:0;
+  width:300px;
+  height:100%;
+  background:#111;
+  padding:20px;
+  transition:0.4s;
+  overflow:auto;
+}
+
+.cartPanel.active{
+  right:0;
+}
+
+.item{
+  background:#222;
+  margin:10px 0;
+  padding:10px;
+  border-radius:10px;
+}
+
+/* CHECKOUT */
+.checkout{
+  margin-top:20px;
+  background:red;
+  padding:10px;
+  text-align:center;
+  border-radius:10px;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+  <div class="logo">ASHEN_x STORE </div>
+  <div class="cart" onclick="toggleCart()">Cart 🛒 (<span id="count">0</span>)</div>
+</div>
+
+<div class="hero">
+  <h1>ASHEN_x STORE</h1>
+  <p>Real Cart System + WhatsApp Order + Modern UI</p>
+</div>
+
+<div class="grid">
+
+  <div class="card">
+    <img src="<a href="https://ibb.co/C5t5HvL5"><img src="https://i.ibb.co/8DBD72kD/IMG-20260506-WA0003.jpg" alt="IMG-20260506-WA0003" border="0"></a>">
+    <h3>Level 63 Account</h3>
+    <p class="price">LKR 2000</p>
+    <button class="btn" onclick="add('Gaming Headset',20)">Buy Now</button>
+  </div>
+
+  <div class="card">
+    <img src="<a href="https://ibb.co/23jM9D1b"><img src="https://i.ibb.co/k2hD7Rsd/IMG-20260504-WA0069.jpg" alt="IMG-20260504-WA0069" border="0"></a>">
+    <h3>Level 76 Account</h3>
+    <p class="price">LKR 4500</p>
+    <button class="btn" onclick="add('Smart Watch',35)">Buy Now</button>
+  </div>
+
+  <div class="card">
+    <img src="<a href="https://ibb.co/BKYbSTKm"><img src="https://i.ibb.co/93d6Cy3J/IMG-20260503-WA0002.jpg" alt="IMG-20260503-WA0002" border="0"></a>">
+    <h3>Level 69 Account</h3>
+    <p class="price">LKR 2500</p>
+    <button class="btn" onclick="add('Gaming Mouse',15)">Buy Now</button>
+  </div>
+
+</div>
+
+<!-- CART -->
+<div class="cartPanel" id="cartPanel">
+  <h2>Your Cart 🛒</h2>
+  <div id="cartItems"></div>
+
+  <div class="checkout" onclick="checkout()">
+    Checkout via WhatsApp 🚀
+  </div>
+</div>
+
+<script>
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+function add(name,price){
+  cart.push({name,price});
+  localStorage.setItem("cart",JSON.stringify(cart));
+  update();
+}
+
+function update(){
+  document.getElementById("count").innerText = cart.length;
+
+  let box = document.getElementById("cartItems");
+  box.innerHTML = "";
+
+  cart.forEach((c,i)=>{
+    box.innerHTML += `
+      <div class="item">
+        ${c.name} - $${c.price}
+        <button onclick="removeItem(${i})">❌</button>
+      </div>
+    `;
+  });
+}
+
+function removeItem(i){
+  cart.splice(i,1);
+  localStorage.setItem("cart",JSON.stringify(cart));
+  update();
+}
+
+function toggleCart(){
+  document.getElementById("cartPanel").classList.toggle("active");
+}
+
+function checkout(){
+  let msg = "Order:%0A";
+  cart.forEach(c=>{
+    msg += c.name + " - $" + c.price + "%0A";
+  });
+
+  window.open("https://wa.me/94740901973?text=" + msg);
+}
+
+update();
+</script>
+
+</body>
+</html>
